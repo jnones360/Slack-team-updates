@@ -6,7 +6,14 @@ Fun and creative way to share updates based on your vibe
 A collection of interactive mini-games for Friday morning standup updates! Because standups should be fun. 🎉
 
 ## 🔗 Current Week's Game
-👉 **[Play This Week's Game](https://[your-company].github.io/standup-games/)**
+👉 **[Play This Week's Game](https://jnones360.github.io/Slack-team-updates/)**
+```
+
+## ✅ Test Your Game Directly:
+
+**Right now, open this URL in a new tab:**
+```
+https://jnones360.github.io/Slack-team-updates/
 
 ## 📅 How It Works
 
