@@ -1,0 +1,116 @@
+# 🚀 Quick Weekly Update Guide
+
+Follow these steps every Thursday night to prep for Friday's game!
+
+## ⏱️ 5-Minute Weekly Process
+
+### Step 1: Create This Week's File (30 seconds)
+```bash
+# Copy template with today's date
+cp template.html week-2025-02-14.html
+```
+
+### Step 2: Update Your Standup Info (2 minutes)
+Open `week-2025-02-14.html` and find this section (search for "UPDATE THIS SECTION"):
+
+```html
+<!-- ⚠️ UPDATE THIS SECTION EACH WEEK ⚠️ -->
+<div class="meme-scale">
+    On a meme scale, I'm feeling like a <strong>6</strong>! Happy Friday! 🎉
+    <!-- CHANGE THE NUMBER ABOVE -->
+</div>
+
+<div class="standup-section">
+    <h3>🔙 Yesterday</h3>
+    <ul>
+        <!-- UPDATE THESE BULLETS -->
+        <li>Your first yesterday item</li>
+        <li>Your second yesterday item</li>
+    </ul>
+</div>
+
+<div class="standup-section">
+    <h3>📅 Today</h3>
+    <ul>
+        <!-- UPDATE THESE BULLETS -->
+        <li>Your first today item</li>
+        <li>Your second today item</li>
+    </ul>
+</div>
+<!-- ⚠️ END OF SECTION TO UPDATE ⚠️ -->
+```
+
+**What to change:**
+1. Meme scale number (1-10)
+2. Yesterday's bullets
+3. Today's bullets
+
+### Step 3: Make It Live (1 minute)
+```bash
+# Copy to index.html so the main link works
+cp week-2025-02-14.html index.html
+
+# Push to GitHub
+git add .
+git commit -m "Add Friday game for week of Feb 14"
+git push
+```
+
+### Step 4: Share in Slack (Friday morning)
+```
+Good morning team! 🦆
+
+Friday Duck Race is LIVE! 
+👉 https://[your-company].github.io/standup-games/
+
+Pick your champion duck and let's see who wins! 
+Drop your results in the thread! 🏁
+
+(Standup update at the end of the game!)
+```
+
+---
+
+## 📝 Example Update
+
+**Before:**
+```html
+<li>RMHC H2H Milestone Achievement requirement changes</li>
+<li>PHC mobile bugs + task details config</li>
+```
+
+**After:**
+```html
+<li>Fixed critical bug in payment processing module</li>
+<li>Completed code review for authentication refactor</li>
+```
+
+---
+
+## 🎯 Pro Tips
+
+✅ **Do this Thursday night** - Takes 5 minutes, ready for Friday morning  
+✅ **Keep bullets short** - 1-2 lines max per item  
+✅ **Test locally first** - Open the HTML file in your browser  
+✅ **Bookmark the process** - You'll do this weekly!
+
+---
+
+## 🆘 Troubleshooting
+
+**Game not updating?**
+- Make sure you copied to `index.html`
+- Check GitHub Pages is still enabled
+- Clear your browser cache
+
+**Link not working?**
+- Verify GitHub Pages is deployed (takes 1-2 min)
+- Check the link format: `https://[org].github.io/standup-games/`
+
+**Forgot to update?**
+- No worries! Can update Friday morning before sharing
+- Just commit and push, waits 1-2 min for GitHub Pages to update
+
+---
+
+That's it! 5 minutes Thursday night = Fun Friday morning! 🎉
