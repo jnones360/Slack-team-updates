@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friday Duck Race 🦆</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive;
+            background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 50%, #90EE90 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+            opacity: 0.8;
+            animation: float 20s infinite linear;
+        }
+        
+        .cloud:before, .cloud:after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+        }
+        
+        .cloud1 { width: 100px; height: 40px; top: 50px; left: -100px; animation-duration: 25s; }
+        .cloud2 { width: 80px; height: 35px; top: 120px; left: -150px; animation-duration: 30s; }
+        .cloud3 { width: 90px; height: 38px; top: 200px; left: -120px; animation-duration: 28s; }
+        
+        @keyframes float {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 200px)); }
+        }
+        
+        .game-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: bounceIn 1s ease;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            color: #FF6B6B;
+            text-shadow: 3px 3px 0px #FFE66D, 6px 6px 0px #4ECDC4;
+            margin-bottom: 10px;
+            transform: rotate(-2deg);
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            color: #2C3E50;
+            font-weight: bold;
+        }
+        
+        #bettingScreen {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            border: 5px solid #FFE66D;
+        }
+        
+        .betting-title {
+            text-align: center;
+            font-size: 2em;
+            color: #FF6B6B;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 0px #FFE66D;
+        }
+        
+        .ducks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .duck-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .duck-card:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+        
+        .duck-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+        
+        .duck-card:hover:before {
+            top: -60%;
+            left: -60%;
+        }
+        
+        .duck-card.selected {
+            border-color: #FFE66D;
+            transform: scale(1.05);
+            box-shadow: 0 0 0 5px rgba(255, 230, 109, 0.5);
+        }
+        
+        .duck-card.red { background: linear-gradient(135deg, #FF6B6B 0%, #C44569 100%); }
+        .duck-card.blue { background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); }
+        .duck-card.yellow { background: linear-gradient(135deg, #FFE66D 0%, #FFAA33 100%); }
+        .duck-card.purple { background: linear-gradient(135deg, #A8E6CF 0%, #3EB595 100%); }
+        
+        .duck-emoji {
+            font-size: 4em;
+            margin-bottom: 10px;
+            display: block;
+            animation: waddle 2s infinite ease-in-out;
+        }
+        
+        @keyframes waddle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        
+        .duck-name {
+            font-size: 1.5em;
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .start-race-btn {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            color: #2C3E50;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.8em;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto;
+            text-transform: uppercase;
+        }
+        
+        .start-race-btn:hover {
+            transform: scale(1.1) rotate(-2deg);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        
+        .start-race-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #raceScreen {
+            display: none;
+        }
+        
+        .race-track {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            border: 5px solid #4ECDC4;
+            margin-bottom: 20px;
+        }
+        
+        .lane {
+            position: relative;
+            height: 100px;
+            margin: 15px 0;
+            background: linear-gradient(90deg, 
+                #E3F2FD 0%, 
+                #BBDEFB 25%, 
+                #90CAF9 50%, 
+                #64B5F6 75%, 
+                #42A5F5 100%);
+            border-radius: 15px;
+            border: 3px solid #2196F3;
+            overflow: hidden;
+        }
+        
+        .lane:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: repeating-linear-gradient(
+                90deg,
+                white 0px,
+                white 20px,
+                transparent 20px,
+                transparent 40px
+            );
+            animation: flowWater 2s linear infinite;
+        }
+        
+        @keyframes flowWater {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 0; }
+        }
+        
+        .duck-racer {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3em;
+            transition: left 0.5s ease-out;
+            animation: bobbing 1s infinite ease-in-out;
+            filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes bobbing {
+            0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+            50% { transform: translateY(-55%) rotate(5deg); }
+        }
+        
+        .finish-line {
+            position: absolute;
+            right: 20px;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            background: repeating-linear-gradient(
+                45deg,
+                #000,
+                #000 10px,
+                #fff 10px,
+                #fff 20px
+            );
+            border-radius: 5px;
+        }
+        
+        .lane-label {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: #2C3E50;
+        }
+        
+        #updateScreen {
+            display: none;
+            animation: slideUp 1s ease;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .update-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            border: 5px solid #A8E6CF;
+        }
+        
+        .winner-announcement {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .winner-emoji {
+            font-size: 6em;
+            animation: bounce 1s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .winner-text {
+            font-size: 2.5em;
+            color: #FF6B6B;
+            text-shadow: 3px 3px 0px #FFE66D;
+            margin: 20px 0;
+        }
+        
+        .result-text {
+            font-size: 1.5em;
+            color: #2C3E50;
+            margin-bottom: 30px;
+        }
+        
+        .standup-update {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .standup-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .standup-section {
+            margin: 20px 0;
+        }
+        
+        .standup-section h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #FFE66D;
+        }
+        
+        .standup-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .standup-section li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .standup-section li:before {
+            content: '🔸';
+            position: absolute;
+            left: 0;
+        }
+        
+        .meme-scale {
+            text-align: center;
+            font-size: 1.8em;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+    
+    <div class="game-container">
+        <div class="header">
+            <h1>🦆 FRIDAY DUCK RACE 🦆</h1>
+            <p class="subtitle">Place your bets & see who wins! 🏁</p>
+        </div>
+        
+        <!-- Betting Screen -->
+        <div id="bettingScreen">
+            <h2 class="betting-title">Choose Your Champion Duck! 🎯</h2>
+            <div class="ducks-grid">
+                <div class="duck-card red" data-duck="red">
+                    <span class="duck-emoji">🦆</span>
+                    <div class="duck-name">Red Racer</div>
+                </div>
+                <div class="duck-card blue" data-duck="blue">
+                    <span class="duck-emoji">🦆</span>
+                    <div class="duck-name">Blue Bolt</div>
+                </div>
+                <div class="duck-card yellow" data-duck="yellow">
+                    <span class="duck-emoji">🦆</span>
+                    <div class="duck-name">Yellow Flash</div>
+                </div>
+                <div class="duck-card purple" data-duck="purple">
+                    <span class="duck-emoji">🦆</span>
+                    <div class="duck-name">Green Thunder</div>
+                </div>
+            </div>
+            <button class="start-race-btn" id="startRaceBtn" disabled>🏁 START THE RACE! 🏁</button>
+        </div>
+        
+        <!-- Race Screen -->
+        <div id="raceScreen">
+            <div class="race-track">
+                <div class="lane">
+                    <div class="lane-label">Red Racer</div>
+                    <div class="duck-racer" id="duck-red">🦆</div>
+                    <div class="finish-line"></div>
+                </div>
+                <div class="lane">
+                    <div class="lane-label">Blue Bolt</div>
+                    <div class="duck-racer" id="duck-blue">🦆</div>
+                    <div class="finish-line"></div>
+                </div>
+                <div class="lane">
+                    <div class="lane-label">Yellow Flash</div>
+                    <div class="duck-racer" id="duck-yellow">🦆</div>
+                    <div class="finish-line"></div>
+                </div>
+                <div class="lane">
+                    <div class="lane-label">Green Thunder</div>
+                    <div class="duck-racer" id="duck-purple">🦆</div>
+                    <div class="finish-line"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Update Screen -->
+        <div id="updateScreen">
+            <div class="update-container">
+                <div class="winner-announcement">
+                    <div class="winner-emoji" id="winnerEmoji">🏆</div>
+                    <div class="winner-text" id="winnerText"></div>
+                    <div class="result-text" id="resultText"></div>
+                </div>
+                
+                <div class="standup-update">
+                    <div class="standup-title">📋 Friday Standup Update 📋</div>
+                    
+                    <!-- ⚠️ UPDATE THIS SECTION EACH WEEK ⚠️ -->
+                    <div class="meme-scale">
+                        On a meme scale, I'm feeling like a <strong>6</strong>! Happy Friday! 🎉
+                        <!-- CHANGE THE NUMBER ABOVE -->
+                    </div>
+                    
+                    <div class="standup-section">
+                        <h3>🔙 Yesterday</h3>
+                        <ul>
+                            <!-- UPDATE THESE BULLETS -->
+                            <li>RMHC H2H Milestone Achievement requirement changes</li>
+                            <li>PHC mobile bugs + task details config in data org & testing + workOrder mass updated in Data org via query</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="standup-section">
+                        <h3>📅 Today</h3>
+                        <ul>
+                            <!-- UPDATE THESE BULLETS -->
+                            <li>RMHC finish off the H2H milestone report</li>
+                            <li>PHC deploy to Prod the task detail ticket & mass data update for WorkOrder</li>
+                        </ul>
+                    </div>
+                    <!-- ⚠️ END OF SECTION TO UPDATE ⚠️ -->
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const duckCards = document.querySelectorAll('.duck-card');
+        const startBtn = document.getElementById('startRaceBtn');
+        const bettingScreen = document.getElementById('bettingScreen');
+        const raceScreen = document.getElementById('raceScreen');
+        const updateScreen = document.getElementById('updateScreen');
+        let selectedDuck = null;
+        
+        duckCards.forEach(card => {
+            card.addEventListener('click', function() {
+                duckCards.forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedDuck = this.dataset.duck;
+                startBtn.disabled = false;
+            });
+        });
+        
+        startBtn.addEventListener('click', function() {
+            bettingScreen.style.display = 'none';
+            raceScreen.style.display = 'block';
+            setTimeout(startRace, 500);
+        });
+        
+        function startRace() {
+            const ducks = ['red', 'blue', 'yellow', 'purple'];
+            const positions = {};
+            const speeds = {};
+            
+            ducks.forEach(duck => {
+                positions[duck] = 0;
+                speeds[duck] = Math.random() * 3 + 2;
+            });
+            
+            const raceInterval = setInterval(() => {
+                let winner = null;
+                
+                ducks.forEach(duck => {
+                    positions[duck] += speeds[duck] + (Math.random() * 2);
+                    const duckElement = document.getElementById(`duck-${duck}`);
+                    const maxPosition = 85;
+                    
+                    if (positions[duck] >= maxPosition) {
+                        positions[duck] = maxPosition;
+                        if (!winner) winner = duck;
+                    }
+                    
+                    duckElement.style.left = positions[duck] + '%';
+                });
+                
+                if (winner) {
+                    clearInterval(raceInterval);
+                    setTimeout(() => showResults(winner), 1000);
+                }
+            }, 100);
+        }
+        
+        function showResults(winner) {
+            raceScreen.style.display = 'none';
+            updateScreen.style.display = 'block';
+            
+            const winnerEmoji = document.getElementById('winnerEmoji');
+            const winnerText = document.getElementById('winnerText');
+            const resultText = document.getElementById('resultText');
+            
+            const duckNames = {
+                red: 'Red Racer',
+                blue: 'Blue Bolt',
+                yellow: 'Yellow Flash',
+                purple: 'Green Thunder'
+            };
+            
+            winnerText.textContent = `${duckNames[winner]} WINS! 🏆`;
+            
+            if (selectedDuck === winner) {
+                winnerEmoji.textContent = '🎉';
+                resultText.textContent = '🎊 YOU PICKED THE WINNER! You have excellent duck-picking intuition! 🦆';
+            } else {
+                winnerEmoji.textContent = '😅';
+                resultText.textContent = `Better luck next time! You picked ${duckNames[selectedDuck]} but hey, all ducks are winners in our hearts! 💙`;
+            }
+        }
+    </script>
+</body>
+</html>
